@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- 第一部分： 配置数据库信息 必须的 -->
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql:///hibernate_day01</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
+		
+		<!-- 第二部分： 配置hibernate信息  可选的-->
+		<!-- 输出底层sql语句 -->
+		<property name="hibernate.show_sql">true</property>
+		<!-- 输出底层sql语句格式 -->
+		<property name="hibernate.format_sql">true</property>
+		<!-- hibernate帮创建表，需要配置之后 
+			update: 如果已经有表，更新，如果没有，创建
+		-->
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<!-- 配置数据库方言
+			在mysql里面实现分页 关键字 limit，只能使用mysql里面
+			在oracle数据库，实现分页rownum
+			让hibernate框架识别不同数据库的自己特有的语句
+		 -->
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		
+		<!-- 第三部分： 把映射文件放到核心配置文件中:例如下面的配置文件-->
+		<mapping resource="cn/itcast/entity/User.hbm.xml"/>
+	</session-factory>
+</hibernate-configuration>
+
+
+User.hbm.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 1 配置类和表对应 
+		class标签
+		name属性：实体类全路径
+		table属性：数据库表名称
+	-->
+	<class name="cn.itcast.entity.User" table="t_user">
+		<!-- 2 配置实体类id和表id对应 
+			hibernate要求实体类有一个属性唯一值
+			hibernate要求表有字段作为唯一值
+		-->
+		<!-- id标签
+			name属性：实体类里面id属性名称
+			column属性：生成的表字段名称
+		 -->
+		<id name="uid" column="uid">
+			<!-- 设置数据库表id增长策略 
+				native:生成表id值就是主键自动增长
+			-->
+			<generator class="native"></generator>
+		</id>
+		<!-- 配置其他属性和表字段对应 
+			name属性：实体类属性名称
+			column属性：生成表字段名称
+		-->
+		<property name="username" column="username"></property>
+		<property name="password" column="password"></property>
+		<property name="address" column="address"></property>
+	</class>
+</hibernate-mapping>
